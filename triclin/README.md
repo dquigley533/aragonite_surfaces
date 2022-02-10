@@ -1,14 +1,14 @@
-x1	Surf 111 shift 0.00
-2	Surf 111 shift 0.50
-3	Surf 112 shift 0.00
-4	Surf 112 shift 0.2619
-5	Surf 112 shift 0.5
-6	Surf 112 shift 0.7381
-7	Surf 211 shift 0.00
-8	Surf 211 shift 0.1752
-9	Surf 211 Shift 0.50
-10	Surf 211 Shift 0.8248
-11	Surf 121 Shift 0.0
-12	Surf 121 Shift 0.25
-13	Surf 121 Shift 0.5
-14	Surf 121 Shift 0.75
+1	111 shift 0.00
+2	111 shift 0.50
+3	112 shift 0.00
+4	112 shift 0.2619
+5	112 shift 0.5
+6	112 shift 0.7381
+7	211 shift 0.00
+8	211 shift 0.1752
+9	211 Shift 0.50
+10	211 Shift 0.8248
+11	121 Shift 0.0
+12	121 Shift 0.25
+13	121 Shift 0.5
+14	121 Shift 0.75
