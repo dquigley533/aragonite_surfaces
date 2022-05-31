@@ -1,0 +1,120 @@
+log none
+
+#############################################
+#        Preamble and read structure        #
+#############################################
+
+units metal
+
+boundary p  p  p
+
+atom_style full
+
+read_data surface.lmp
+#read_restart restart.*
+
+#############################################
+#         Atom types and charges            #
+#############################################
+
+group Ca type 1
+group C4 type 2
+group O4 type 3
+group O2 type 4
+group H2 type 5
+
+set group Ca charge   2.000000
+set group C4 charge   1.123285
+set group O4 charge  -1.041095
+set group O2 charge  -0.820000
+set group H2 charge   0.410000
+
+
+#############################################
+#                Bond types                 #
+#############################################
+# type 1 : carbonate C4-O4 stretch 
+# type 2 : water O2-H2 stretch
+
+
+bond_style harmonic
+bond_coeff 1 17.950 1.3130
+
+bond_coeff 2 22.965   1.0120
+
+
+
+#############################################
+#               Angle types                 #
+#############################################
+# Type 1 : carbonate O4-C4-O4 angle 
+# Type 2 : water     H2-O2-H2 angle
+
+
+angle_style hybrid class2 harmonic
+
+angle_coeff 1 class2       120.     6.617   0. 0.
+angle_coeff 1 class2   bb  12.818   1.3042  1.3042
+angle_coeff 1 class2   ba  1.53319  1.53319 1.3042 1.3042 
+
+angle_coeff 2 harmonic 1.63068 113.24
+
+
+#############################################
+#             Improper types                #
+#############################################
+# Type 1 : carbonate   out-of-plane potential
+
+improper_style distance
+improper_coeff 1 20.796 360.00
+
+#############################################
+#            Pair potentials                #
+#############################################
+pair_style hybrid/overlay coul/long 9. lj/cut 9. table linear 200001
+pair_coeff * * coul/long
+
+pair_coeff 1 2 table ../caco3.pot buck_ca_c4 9.
+pair_coeff 1 3 table ../caco3.pot buck_ca_o4 9.
+pair_coeff 3 3 table ../caco3.pot buck_o4_o4 9.
+
+# Calcium water
+pair_coeff 1 4 table ../caco3.pot lj_ca_o2  9.
+
+# Carbonate oxygen - water oxygen
+pair_coeff 3 4 table ../caco3.pot buck_o4_o2 9.
+
+# Carbonate oxygen - water hydrogen
+pair_coeff 3 5 table ../caco3.pot buck_o4_h2 9.
+
+
+# Water oxygen/water oxygen
+pair_coeff 4 4 lj/cut   0.0067400000   3.165492
+pair_modify tail yes
+
+
+# Parameters for reciprocal space long-range electrostatics
+kspace_style pppm 1.0e-4
+
+velocity all create 300.0 30446 mom yes dist gaussian
+
+thermo_style custom step temp pe ke etotal enthalpy press vol cpu
+
+thermo 100    
+timestep 0.001
+
+
+fix 1 all npt aniso 1.0 1.0 1.0 temp 300. 300. 0.1 tchain 5 pchain 5 mtk yes 
+
+dump 1 all dcd 5000 chain.dcd
+restart 10000 restart.1 restart.2
+
+# Run for 20 nanoseconds 
+run 20000000
+
+
+
+
+
+
+
